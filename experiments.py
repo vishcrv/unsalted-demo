@@ -5,30 +5,19 @@ Automated 25 test runs with randomized parameters.
 import random
 
 from database_generator import generate_dictionary, generate_users
-from unsalted_system import hash_database
-from attacker_unsalted import build_rainbow_table, crack_database
+from hash_systems import hash_database
+from attackers import build_rainbow_table, crack_database
 from metrics import calculate_success_rate, log_results_to_dict
 
 
 def run_test_suite(num_tests: int = 25, dict_base_size: int = 2000) -> list:
-    """
-    Run num_tests automated attack experiments.
-
-    Each test randomizes:
-        - num_users (50-500)
-        - reuse_probability (0.5-0.9)
-        - dictionary subset size
-
-    Returns:
-        List of result dicts.
-    """
-    # Generate a full dictionary once, then sample subsets
+    
     full_dictionary = generate_dictionary(dict_base_size)
 
     results = []
 
     for i in range(num_tests):
-        # Randomize parameters
+        
         num_users = random.randint(50, 500)
         reuse_prob = round(random.uniform(0.5, 0.9), 2)
         dict_size = random.randint(len(full_dictionary) // 2, len(full_dictionary))
